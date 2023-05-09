@@ -1,9 +1,44 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import Image from "next/image";
+import { Inter } from "next/font/google";
+import { useEffect } from "react";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
+
+const getWebAccessToken = async () => {
+  console.log(process.env.NEXT_PUBLIC_COOKIE, "SP DC Cookie");
+
+  const res = await fetch(
+    "https://open.spotify.com/get_access_token?reason=transport&productType=web_player",
+    {
+      headers: {
+        Cookie: `sp_dc=${process.env.NEXT_PUBLIC_COOKIE}`,
+      },
+    }
+  );
+  console.log(res, "Web Access Token");
+
+  return res.json();
+};
+
+const getFriendActivity = async () => {
+  const res = await fetch(
+    "https://spclient.wg.spotify.com/presence-view/v1/buddylist",
+    {
+      headers: {
+        Authorization: `Bearer ${await getWebAccessToken()}`,
+      },
+    }
+  );
+  console.log(res, "Friend Activity");
+
+  return res.json();
+};
 
 export default function Home() {
+  useEffect(() => {
+    getFriendActivity();
+  }, []);
+
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
@@ -20,7 +55,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            By{' '}
+            By{" "}
             <Image
               src="/vercel.svg"
               alt="Vercel Logo"
@@ -52,7 +87,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
+            Docs{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
             </span>
@@ -69,7 +104,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
+            Learn{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
             </span>
@@ -86,7 +121,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
+            Templates{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
             </span>
@@ -103,7 +138,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
+            Deploy{" "}
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
             </span>
@@ -114,5 +149,5 @@ export default function Home() {
         </a>
       </div>
     </main>
-  )
+  );
 }
