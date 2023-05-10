@@ -1,10 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 
-type Data = {
-  name: string;
-};
-
 const getWebAccessToken = async ({ cookie }: { cookie: string }) => {
   const res = await fetch(
     "https://open.spotify.com/get_access_token?reason=transport&productType=web_player",
