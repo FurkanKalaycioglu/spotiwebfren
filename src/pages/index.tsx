@@ -124,7 +124,7 @@ export default function Home() {
       </div>
       {sp_dc === "" ? (
         <div className="flex flex-col items-center justify-center gap-3">
-          <h3 className="text-2xl">No Key on local storage</h3>
+          <h3 className="text-2xl text-white">No Key on local storage</h3>
           <input
             placeholder="SP_DC Key"
             type="text"

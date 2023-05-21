@@ -5,6 +5,7 @@ const nextConfig = {
       "i.scdn.co",
       "platform-lookaside.fbsbx.com",
       "scontent-ams2-1.xx.fbcdn.net",
+      "scontent-lcy1-1.xx.fbcdn.net",
     ],
   },
   reactStrictMode: true,
