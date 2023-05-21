@@ -21,7 +21,7 @@ export default function Document() {
         />
         <meta
           property="og:image"
-          content="https://spotiwebfren.vercel.app/vercel.svg"
+          content="https://spotiwebfren.vercel.app/360.png"
         />
 
         <meta property="twitter:card" content="summary_large_image" />
@@ -36,7 +36,7 @@ export default function Document() {
         />
         <meta
           property="twitter:image"
-          content="https://spotiwebfren.vercel.app/vercel.svg"
+          content="https://spotiwebfren.vercel.app/360.png"
         />
       </Head>
 
