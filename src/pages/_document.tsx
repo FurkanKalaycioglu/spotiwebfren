@@ -16,6 +16,10 @@ export default function Document() {
         <meta property="og:url" content="https://spotiwebfren.vercel.app/" />
         <meta property="og:title" content="Spotify Friend Activity" />
         <meta
+          name="google-site-verification"
+          content="zyFhAv2rGzl_VRzgh3UcyQVuomxX4Rit3OkB9QETx3I"
+        />
+        <meta
           property="og:description"
           content="See what your friends are listening to on Spotify."
         />
