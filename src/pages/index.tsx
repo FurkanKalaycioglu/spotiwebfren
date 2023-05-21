@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Footer from "@/components/Footer";
 import Activity from "@/components/Activity";
-
+import cn from "classnames";
 const getFriendActivity = async (sp_dc: string) => {
   const response = await fetch(`/api/getActivity?sp_dc=${sp_dc}`);
   const data = await response.json();
@@ -12,16 +12,32 @@ const setKeyToLocalStorage = (key: string) => {
   localStorage.setItem("sp_dc", key);
 };
 
+const saveHiddenUsersToLocalStorage = (users: string[]) => {
+  localStorage.setItem("hiddenUsers", JSON.stringify(users));
+};
+
+const getHiddenUsersFromLocalStorage = () => {
+  const users = localStorage.getItem("hiddenUsers");
+  if (users) {
+    return JSON.parse(users);
+  }
+  return [];
+};
+
 export default function Home() {
   const [friendActivity, setFriendActivity] = useState([]);
   const [sp_dc, setSp_dc] = useState("");
   const [sp_dcTemp, setSp_dcTemp] = useState("");
-
+  const [hideUsers, setHideUsers] = useState(false);
+  const [hiddenUsers, setHiddenUsers] = useState<string[]>([]);
   useEffect(() => {
     const sp_dc = localStorage.getItem("sp_dc");
     if (sp_dc) {
       setSp_dc(sp_dc);
     }
+    const hiddenUsers = getHiddenUsersFromLocalStorage();
+    setHiddenUsers(hiddenUsers);
+
     if (sp_dc) {
       getFriendActivity(sp_dc).then((data) => {
         setFriendActivity(data);
@@ -57,6 +73,20 @@ export default function Home() {
             >
               Refresh
             </button>
+            <button
+              className={cn(
+                "h-10 rounded-lg border p-2 text-xs font-bold text-white ",
+                {
+                  "bg-transparent hover:bg-green-500": !hideUsers,
+                  "bg-green-500 hover:bg-transparent": hideUsers,
+                }
+              )}
+              onClick={() => {
+                setHideUsers(!hideUsers);
+              }}
+            >
+              Hide Users
+            </button>
           </div>
         )}
       </div>
@@ -83,9 +113,42 @@ export default function Home() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {friendActivity
             .sort((a: any, b: any) => b.timestamp - a.timestamp)
-            .map((activity: any, index: number) => (
-              <Activity activity={activity} key={index} />
-            ))}
+            .map((activity: any, index: number) => {
+              if (!hideUsers && hiddenUsers.includes(activity.user.uri)) {
+                return null;
+              }
+
+              return (
+                <div className="relative" key={index}>
+                  <Activity activity={activity} />
+                  {hideUsers && (
+                    <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50">
+                      <button
+                        onClick={() => {
+                          const users = getHiddenUsersFromLocalStorage();
+                          if (users.includes(activity.user.uri)) {
+                            const newUsers = users.filter(
+                              (user: any) => user !== activity.user.uri
+                            );
+                            setHiddenUsers(newUsers);
+                            saveHiddenUsersToLocalStorage(newUsers);
+                          } else {
+                            const newUsers = [...users, activity.user.uri];
+                            setHiddenUsers(newUsers);
+                            saveHiddenUsersToLocalStorage(newUsers);
+                          }
+                        }}
+                        className="h-10 rounded-lg border  bg-transparent p-2 text-xs font-bold text-white hover:bg-green-500"
+                      >
+                        {hiddenUsers.find((user) => user === activity.user.uri)
+                          ? "Show"
+                          : "Hide"}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
         </div>
       )}
       <Footer />

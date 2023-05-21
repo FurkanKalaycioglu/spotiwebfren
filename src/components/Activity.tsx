@@ -4,7 +4,7 @@ import React from "react";
 
 function Activity({ activity }: { activity: any }) {
   return (
-    <div className="flex flex-row items-center gap-3 rounded-lg border border-gray-500 px-3 py-2">
+    <div className="flex h-full w-full flex-row items-center gap-3 rounded-lg border border-gray-500 px-3 py-2">
       <div className="h-12 w-12">
         {activity.user.imageUrl ? (
           <Image
