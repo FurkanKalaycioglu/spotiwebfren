@@ -1,7 +1,5 @@
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import Footer from "@/components/Footer";
-import { formatTimestamp } from "@/utils/formatTimeStamp";
 import Activity from "@/components/Activity";
 
 const getFriendActivity = async (sp_dc: string) => {
